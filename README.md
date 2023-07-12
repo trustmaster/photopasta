@@ -18,6 +18,10 @@ PhotoPasta helps you create beautiful self-hosted photo blogs. No media platform
     -   any web hosting
 4. Share it with the world via RSS feeds
 
+## Demo
+
+Demo website built with Hugo, PhotoPasta and Google Photos: [Photo Stories by Vladimir Sibirov](https://photos.kodigy.com).
+
 ## Ingredients
 
 Currently PhotoPasta provides the following components that can be used independently to your liking:
