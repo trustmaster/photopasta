@@ -1,0 +1,11 @@
+{{- $height := .Get "height" -}}
+{{- $style_attr := "" -}}
+
+{{- if $height -}}
+{{- $height = int $height -}}
+{{- $style_attr = printf "style=\"--min-height: %dpx\"" $height -}}
+{{- end -}}
+
+<div class="gallery" {{ safeHTMLAttr $style_attr }}>
+    {{ .Inner }}
+</div>

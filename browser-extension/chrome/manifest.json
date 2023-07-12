@@ -1,0 +1,45 @@
+{
+    "manifest_version": 3,
+    "name": "PhotoPasta",
+    "version": "1.0",
+    "description": "Copy direct image URLs from Google Photos and paste them into PhotoPasta shortcodes.",
+    "icons": {
+        "16": "images/icon-16.png",
+        "24": "images/icon-24.png",
+        "32": "images/icon-32.png",
+        "48": "images/icon-48.png",
+        "128": "images/icon-128.png"
+    },
+    "action": {
+        "default_icon": "images/icon-24.png",
+        "default_title": "PhotoPasta settings",
+        "default_popup": "src/options.html"
+    },
+    "background": {
+        "service_worker": "src/background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://photos.google.com/*"
+            ],
+            "js": [
+                "src/content.js"
+            ],
+            "css": [
+                "src/content.css"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    "host_permissions": [
+        "https://photos.google.com/*"
+    ],
+    "permissions": [
+        "storage",
+        "scripting",
+        "activeTab",
+        "notifications",
+        "contextMenus"
+    ]
+}

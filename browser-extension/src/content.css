@@ -1,0 +1,17 @@
+.hcg-toast {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 999999;
+    padding: 20px;
+    margin: 20px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    animation: toast 3s ease-in-out;
+}
+
+.hcg-toast-warning {
+    background-color: rgb(208, 84, 1);
+}

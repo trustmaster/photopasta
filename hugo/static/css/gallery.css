@@ -1,0 +1,65 @@
+/* Based on Justified Image Grid by Helmut Wandl and Flexbin CSS
+  <https://ehtmlu.com/blog/justified-image-grid-only-with-css-html>
+  <https://github.com/guoyunhe/flexbin>
+*/
+/* Settings start */
+.gallery {
+  --space: 10px;
+  --min-height: 240px;
+  --last-row-background: transparent;
+}
+/* Settings end */
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: var(--space);
+  list-style: none;
+  margin: 20px 0 !important; /* We use !important to avoid gaps in some environments. */
+  padding: 0 !important; /* We use !important to avoid gaps in some environments. */
+}
+
+.gallery > * {
+  /*flex-grow: calc(var(--width) * (100000 / var(--height)));*/
+  flex-grow: calc(var(--width) / var(--height));
+  flex-basis: calc(var(--min-height) * (var(--width) / var(--height)));
+  aspect-ratio: var(--width) / var(--height);
+  height: 100%; /* Required on Safari */
+  position: relative;
+  overflow: hidden;
+  margin: 0 !important; /* We use !important to avoid gaps in some environments. */
+  padding: 0 !important; /* We use !important to avoid gaps in some environments. */
+}
+
+.gallery > * > img {
+  position: absolute;
+  width: 100% !important; /* Overwrite theme value */
+  height: 100%;
+  margin: 0;
+}
+
+.gallery::after {
+  content: " ";
+  /*flex-grow: 1000000000;*/
+  flex-grow: 6;
+  background: var(--last-row-background);
+}
+
+a.photo {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+img.thumb {
+  opacity: 0;
+  transition: all 1s ease;
+}
+
+img.thumb.fade-in {
+  opacity: 1;
+}
+
+img.thumb.loaded {
+  transition: transform 0.5s ease;
+}

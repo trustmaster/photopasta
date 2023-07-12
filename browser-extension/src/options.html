@@ -1,0 +1,71 @@
+<html>
+<link rel="stylesheet" href="options.css" />
+
+<body>
+    <div class="tabs">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="options">Options</button>
+            <button class="tab-button" data-tab="help">Help</button>
+        </div>
+
+        <div id="options" class="tab-content" style="display: block">
+            <h2>Options</h2>
+            <div id="status"></div>
+            <!-- <div>
+                <label for="max-width">Max. full image width</label>
+                <input type="number" id="max-width" name="max-width" value="8000" min="0" max="10000"
+                    placeholder="0 - unlimited" />
+            </div> -->
+            <div>
+                <label for="use-thumb">Create preview miniatures</label>
+                <input type="checkbox" id="use-thumb" name="use-thumb" value="true" checked />
+            </div>
+            <div>
+                <label for="thumb-hdpi">Optimize for High DPI displays</label>
+                <input type="checkbox" id="thumb-hdpi" name="thumb-hdpi" value="true" checked />
+            </div>
+            <div>
+                <label for="thumb-width">Preview width</label>
+                <input type="number" id="thumb-width" name="thumb-width" value="0" min="0" max="2000"
+                    placeholder="0 - default" />
+            </div>
+            <div>
+                <label for="row-height">Row height for gallery</label>
+                <input type="number" id="row-height" name="row-height" value="0" min="0" max="2000"
+                    placeholder="0 - default" />
+            </div>
+            <div>
+                <label for="use-caption">Use captions</label>
+                <input type="checkbox" id="use-caption" name="use-caption" value="true" checked />
+            </div>
+            <div>
+                <button id="save">Save</button>
+            </div>
+        </div>
+
+        <div id="help" class="tab-content">
+            <h3>How to use this extension</h3>
+            <ol>
+                <li>
+                    Find or create a shared album in
+                    <a href="https://photos.google.com">Google Photos</a> and copy the share link
+                </li>
+                <li>Open the share link in an incognito window (to obtain persistent public image URLs)</li>
+                <li>Click on the photo to open view mode</li>
+                <li>Click on the full photo to get it in browser's focus</li>
+                <li>Right click to open context menu</li>
+                <li>
+                    Choose "CopyPasta -> Copy Image Markdown" to copy image shortcode
+                </li>
+            </ol>
+            <h4>Troubleshooting</h4>
+            <p>
+                If the context menu doesn't appear or clicking on the menu items doesn't do anything for some
+                reason, reloading the page and trying again typically works.
+            </p>
+        </div>
+    </div>
+</body>
+<script src="options.js"></script>
+
+</html>

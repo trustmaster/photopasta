@@ -1,0 +1,151 @@
+<!-- Get parameters -->
+{{- $src := .Get "src" -}}
+{{- $caption := .Get "caption" -}}
+{{- $thumb := .Get "thumb" -}}
+{{- $width := .Get "width" -}}
+{{- $height := .Get "height" -}}
+{{- $full_width := .Get "src-width" -}}
+{{- $full_height := .Get "src-height" -}}
+
+{{- if not $src -}}
+    {{- errorf "Photo shortcode requires src parameter to be set in %q" .Path -}}
+{{- end -}}
+
+
+<!-- Define main variables -->
+{{- $thumbnail := "" -}}
+{{- $width_attr := "" -}}
+{{- $height_attr := "" -}}
+{{- $full_width_attr := "" -}}
+{{- $full_height_attr := "" -}}
+
+
+<!-- Cast strings to int for type safety -->
+{{- if $width }}{{ $width = int $width }}{{ else }}{{ $width = 0 }}{{ end -}}
+{{- if $height }}
+    {{ $height = int $height }}
+{{ else }}
+    {{ $height = 0 }}
+{{ end -}}
+
+{{- if $full_width -}}
+    {{- $full_width = int $full_width }}
+    {{- $full_width_attr = printf "data-width=\"%d\"" $full_width -}}
+{{- end -}}
+
+{{- if $full_height -}}
+    {{- $full_height = int $full_height }}
+    {{- $full_height_attr = printf "data-height=\"%d\"" $full_height -}}
+{{- end -}}
+
+
+<!-- Get defaults either from site config or use hardcoded fallbacks -->
+{{- $default_width := 1200 -}}
+{{- if .Site.Params.thumbnailWidth -}}
+    {{- $default_width = int .Site.Params.thumbnailWidth -}}
+{{- end -}}
+{{- $default_height := 0 -}}
+{{- if .Site.Params.thumbnailHeight -}}
+    {{- $default_height = int .Site.Params.thumbnailHeight -}}
+{{- end -}}
+{{- $jpeg_quality := 95 -}}
+{{- if .Site.Params.thumbnailQuality -}}
+    {{- $jpeg_quality = int .Site.Params.thumbnailQuality -}}
+{{- end -}}
+
+
+<!-- Assign a thumbnail -->
+{{- if $thumb -}}
+    <!-- Link an existing thumbnail -->
+
+    {{- if $width -}}
+        {{- $width_attr = printf "width=\"%d\"" $width -}}
+    {{- end -}}
+    {{- if $height -}}
+        {{- $height_attr = printf "height=\"%d\"" $height -}}
+    {{- end -}}
+{{- else -}}
+    <!-- Create thumbnail from remote or local source -->
+    {{- $image := "" -}}
+    {{- if or (hasPrefix $src "http://") (hasPrefix $src "https://") -}}
+        {{- $image = resources.GetRemote $src -}}
+    {{- else -}}
+        {{- $image = resources.Get $src -}}
+    {{- end -}}
+
+    {{- if not $image -}}
+        {{- errorf "Could not get image %s" $src -}}
+    {{- end -}}
+
+    {{- $source_width := $image.Width -}}
+    {{- if not $source_width -}}
+        {{- errorf "Image width is empty %q" $image.Width -}}
+    {{- end -}}
+    {{- $source_height := $image.Height -}}
+    {{- if not $source_height -}}
+        {{- errorf "Image height is empty %q" $image.Height -}}
+    {{- end -}}
+    {{- $aspect_ratio := div (float $source_width) (float $source_height) -}}
+
+
+    <!-- Define width and hight of the thumbnail -->
+    <!-- Width has priority by default -->
+    {{- if gt $width 0 -}}
+        <!-- Ignore height and get height by aspect ratio -->
+        {{- $height = int (math.Round (div $width $aspect_ratio)) -}}
+    {{- else -}}
+        {{- if gt $height 0 -}}
+            <!-- If height is specified, then it has priority -->
+            {{- $width = int (math.Round (mul $height $aspect_ratio)) -}}
+        {{- else -}}
+            <!-- None of width or height was specified, fall back to defaults -->
+            {{- if gt $default_width 0 -}}
+                <!-- Width has priority for defaults too -->
+                {{- $width = $default_width -}}
+                {{- $height = int (math.Round (div $width $aspect_ratio)) -}}
+            {{- else -}}
+                <!-- Check if height priority is configured -->
+                {{- if gt $default_height 0 -}}
+                    {{- $height = $default_height -}}
+                    {{- $width = int (math.Round (mul $height $aspect_ratio)) -}}
+                {{- else -}}
+                    <!-- No dimensions were specified, fall back to original image size -->
+                    {{- $width = $source_width -}}
+                    {{- $height = $source_height -}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+
+
+    <!-- Create the thumbnail image -->
+    {{- $thumbnail = $image.Resize (printf "%dx%d q%d" $width $height $jpeg_quality) -}}
+
+    {{- $thumb = $thumbnail.Permalink -}}
+    {{- $width_attr = printf "width=\"%d\"" $thumbnail.Width -}}
+    {{- $height_attr = printf "height=\"%d\"" $thumbnail.Height -}}
+{{- end -}}
+
+
+<!-- HTML of the image -->
+<a
+    class="photo"
+    data-type="image"
+    data-gallery="post"
+    href="{{ $src | absURL }}"
+    title="{{ $caption }}"
+    {{ safeHTMLAttr $full_width_attr }}
+    {{ safeHTMLAttr $full_height_attr }}
+>
+    <img
+        class="thumb"
+        alt="{{ $caption }}"
+        {{- if hasPrefix $thumb "https://lh3.googleusercontent.com" -}}
+            data-src="{{ $thumb | absURL }}" src="/img/thumbnail.svg"
+        {{- else -}}
+            src="{{ $thumb | absURL }}"
+        {{- end -}}
+        {{ safeHTMLAttr $width_attr }}
+        {{ safeHTMLAttr $height_attr }}
+    />
+</a>
