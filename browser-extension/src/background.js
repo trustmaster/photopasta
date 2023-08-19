@@ -1,29 +1,5 @@
 const browser = chrome || browser;
 
-function toggleIcons(mode) {
-    if (mode === 'dark') {
-        browser.action.setIcon({
-            path: {
-                16: 'images/icon-16-dark.png',
-                24: 'images/icon-24-dark.png',
-                32: 'images/icon-32-dark.png',
-                48: 'images/icon-48-dark.png',
-                128: 'images/icon-128-dark.png',
-            }
-        });
-    } else {
-        browser.action.setIcon({
-            path: {
-                16: 'images/icon-16.png',
-                24: 'images/icon-24.png',
-                32: 'images/icon-32.png',
-                48: 'images/icon-48.png',
-                128: 'images/icon-128.png',
-            }
-        });
-    }
-}
-
 // var scriptsInjected = true;
 // function injectContentScripts(tabId, callback) {
 //     browser.scripting.insertCSS({
