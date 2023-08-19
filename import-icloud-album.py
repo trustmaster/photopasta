@@ -8,6 +8,7 @@ import json
 import os
 import shutil
 from datetime import datetime
+from typing import Any, Generator
 from urllib import request
 
 # iCloud HTTP headers
@@ -24,7 +25,7 @@ headers = {
 
 # Derivative represents an image in a specific size.
 class Derivative:
-    def __init__(self, checksum: str, file_size: int, width: int, height: int, url: str = None):
+    def __init__(self, checksum: str, file_size: int, width: int, height: int, url: str | None = None):
         self.checksum = checksum
         self.file_size = file_size
         self.width = width
@@ -68,7 +69,7 @@ class Image:
         caption: str,
         height: int,
         width: int,
-        media_asset_type: str = None
+        media_asset_type: str | None = None
     ):
         self.batch_guid = batch_guid
         self.derivatives = derivatives
@@ -85,7 +86,7 @@ class Image:
 
     # Static method to create an Image from a dictionary.
     @staticmethod
-    def from_dict(data: dict):
+    def from_dict(data: dict[str, Any]):
         derivatives = {
             key: Derivative.from_dict(value) for key, value in data["derivatives"].items()
         }
@@ -125,7 +126,7 @@ class Image:
 
     # Returns a dict containing the URL, width and height of the derivative with the same height
     # as the image itself.
-    def get_original(self) -> dict | None:
+    def get_original(self) -> dict[str, Any] | None:
         for derivative in self.derivatives.values():
             if derivative.height == self.height:
                 return {
@@ -137,11 +138,13 @@ class Image:
         return None
 
     # Returns a dict containing the URL, width and height of the smallest derivative.
-    def get_smallest_derivative(self) -> dict | None:
-        smallest_derivative = None
+    def get_smallest_derivative(self) -> dict[str, Any] | None:
+        smallest_derivative: Derivative | None = None
         for derivative in self.derivatives.values():
             if smallest_derivative is None or derivative.height < smallest_derivative.height:
                 smallest_derivative = derivative
+        if smallest_derivative is None:
+            return None
         return {
             "checksum": smallest_derivative.checksum,
             "url": smallest_derivative.url,
@@ -345,7 +348,7 @@ def enrich_images_with_urls(api_response: ApiResponse, urls: dict[str, str]) -> 
 
 
 # chunks splits a list into chunks of a given size.
-def chunks(lst: list, n: int) -> list:
+def chunks(lst: list, n: int) -> Generator[list, None, None]:
     for i in range(0, len(lst), n):
         yield lst[i: i + n]
 
@@ -406,6 +409,9 @@ class Photo:
     def from_image(image: Image):
         source = image.get_original()
         thumb = image.get_smallest_derivative()
+
+        if source is None or thumb is None:
+            return
 
         return Photo(
             checksum=source["checksum"],
@@ -481,30 +487,34 @@ def get_photo_shortcode(photo: Photo, token: str, directory: str, width: int) ->
 
     return shortcode
 
+if __name__ == '__main__':
+    # Get token from command line argument using argparse
+    parser = argparse.ArgumentParser(
+        description='Imports iCloud shared album images to assets/photo and prints Hugo shortcodes for them')
+    parser.add_argument('token', metavar='TOKEN', type=str,
+                        help='iCloud Shared Album token')
+    parser.add_argument('directory', metavar='DIRECTORY', type=str, nargs='?',
+                        default='assets/photo', help='Target directory to save files in. Default: assets/photo')
+    parser.add_argument('-w', '--width', type=int, help='Thumbnail width in pixels for width priority shortcodes (standalone)')
+    parser.add_argument('-h', '--height', type=int, help='Thumbnail height in pixels for height priority shortcodes (gallery tiles)')
 
-# Get token from command line argument using argparse
-parser = argparse.ArgumentParser(
-    description='Imports iCloud shared album images to assets/photo and prints Hugo shortcodes for them')
-parser.add_argument('token', metavar='TOKEN', type=str,
-                    help='iCloud Shared Album token')
-parser.add_argument('directory', metavar='DIRECTORY', type=str, nargs='?',
-                    default='assets/photo', help='Target directory to save files in. Default: assets/photo')
-parser.add_argument('-w', '--width', type=int, help='Thumbnail width')
-args = parser.parse_args()
+    args = parser.parse_args()
 
-token = args.token
+    token = args.token
 
-album = get_album_with_images(args.token)
-# print(json.dumps(album.metadata.to_dict(), sort_keys=True, indent=4))
-shortcodes = []
-for image in album.images:
-    photo = Photo.from_image(image)
-    # print(json.dumps(photo.to_dict(), sort_keys=True,
-    #       indent=4, separators=(',', ': ')))
-    download_photo(photo, token, args.directory)
-    shortcodes.append(get_photo_shortcode(
-        photo, token, args.directory, args.width))
+    album = get_album_with_images(args.token)
+    # print(json.dumps(album.metadata.to_dict(), sort_keys=True, indent=4))
+    shortcodes = []
+    for image in album.images:
+        photo = Photo.from_image(image)
+        if photo is None:
+            continue
+        # print(json.dumps(photo.to_dict(), sort_keys=True,
+        #       indent=4, separators=(',', ': ')))
+        download_photo(photo, token, args.directory)
+        shortcodes.append(get_photo_shortcode(
+            photo, token, args.directory, args.width))
 
-print('Shortcodes for the imported images:')
-print('---\n')
-print('\n\n'.join(shortcodes))
+    print('Shortcodes for the imported images:')
+    print('---\n')
+    print('\n\n'.join(shortcodes))
