@@ -223,6 +223,13 @@ function copyImageToMarkdown(srcUrl, isGalleryRow = false) {
 try {
     console.log('CONTENT');
 
+    // Detect dark mode and send a message to the background script to update the icon
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        browser.runtime.sendMessage({ theme: 'dark' });
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        browser.runtime.sendMessage({ theme: 'light' });
+    }
+
     browser.runtime.onMessage.addListener((request) => {
         if (request.menuInfo) {
             if (request.menuInfo.menuItemId === 'all-images') {
