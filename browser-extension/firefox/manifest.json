@@ -6,7 +6,7 @@
         }
     },
     "name": "PhotoPasta",
-    "version": "1.0",
+    "version": "1.0.1",
     "description": "Copy direct image URLs from Google Photos and paste them into PhotoPasta shortcodes.",
     "icons": {
         "16": "images/icon-16.png",

@@ -24,24 +24,7 @@ function toggleIcons(mode) {
     }
 }
 
-// var scriptsInjected = true;
-// function injectContentScripts(tabId, callback) {
-//     browser.scripting.insertCSS({
-//         target: {tabId},
-//         files: ['content.css']
-//     });
-//     browser.scripting.executeScript({
-//         target: {tabId},
-//         files: ['content.js']
-//     }, callback);
-//     scriptsInjected = true;
-// }
-
 function handleContextMenuClick(info, tab) {
-    // if (!scriptsInjected) {
-    //     injectContentScripts(tab.id, () => {
-    //         browser.tabs.sendMessage(tab.id, {menuInfo: info});
-    //     });
     browser.tabs.sendMessage(tab.id, { menuInfo: info });
 }
 

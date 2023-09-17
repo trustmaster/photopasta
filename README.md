@@ -88,7 +88,7 @@ Copy `layouts/_default/rss.xml` from the `hugo` directory of this repo to your H
 Currently this step is only needed if you plan inserting content from Google Photos. You can install the extension from the official stores:
 
 - Google Chrome users: _TODO: add link_
-- Firefox users: _TODO: add link_
+- **Firefox** users: [PhotoPasta Firefox Add-on](https://addons.mozilla.org/ru/firefox/addon/photopasta/)
 
 Copying the links to Google Photos gives persistent links only if you use the extension while browsing the album as a guest. You will need to use a browser other than your primary one for that and stay logged out of your Google account, or you can use the same browser but in incognito mode.
 
