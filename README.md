@@ -59,6 +59,7 @@ Add the following code to your theme's `layouts/partials/head.html`:
 Add the following code to your theme's `layout/partials/footer.html`:
 
 ```html
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
 <script type="text/javascript" src="/js/gallery.js"></script>
 <script type="text/javascript">
     const lightbox = GLightbox({
