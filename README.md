@@ -97,6 +97,8 @@ If you are willing to use the incognito mode, an extra step is required to enabl
 - In Google chrome: open the extensions page using the URL , find the PhotoPasta extension, and enable "Allow in incognito" option.
 - In Firefox: open the extensions page (about:addons), find the PhotoPasta extension, and enable "Run in Private Windows" option.
 
+One more step is required on Firefox to allow the extension to access Google Photos content. If you see the green dot on the extension icon, right click on it and choose "Always allow on photos.google.com".
+
 ### Browser extension settings
 
 If you click on the PhotoPasta extension icon (📷), it will open a Settings and Help dialog. The PhotoPasta extension has the following settings:
