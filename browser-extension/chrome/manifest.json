@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "PhotoPasta",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Copy direct image URLs from Google Photos and paste them into PhotoPasta shortcodes.",
     "icons": {
         "16": "images/icon-16.png",
