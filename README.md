@@ -168,7 +168,23 @@ Your Photo blog can be hosted anywhere. Hugo docs have a set of example guides o
 
 ## Using RSS to subscribe to content
 
-_TODO_
+Hugo generates RSS feed for your site automatically, which is usually accessible via `https://{YOUR_SITE_URL}/index.xml`. Share the RSS links with your site visitors so that they can subscribe to it with their favourite RSS reader app.
+
+Not sure which apps they can use for free? Here is a short recommendation list.
+
+### For Apple devices only
+
+- [NetNewsWire](https://netnewswire.com/) - a free and open source RSS reader with native apps for iPhone, iPad, Mac, and a Safari extension. No ads, no recommendations, no feed hijacking. Synchronizes your subscriptons across devices via iCloud, or other hosted RSS services.
+
+### Cross-platform
+
+- [Feeder](https://feeder.co/) - a nice looking RSS reader with a wide variety of platforms supported. It has iOS and Android apps, and extensions for Chrome, Firefox, and Edge. With the free plan, synchronization is on board, and no ads are shown. You can subscribe up to 200 feeds and get them updated every 30 minutes. Paid plans raise the limits and add more features.
+- [Feedly](https://feedly.com/) - a free RSS reader with native apps for iPhone, iPad, Android, and a web app. Synchronizes your subscriptons across devices via Feedly Cloud service. The free plan contains ads and recommendations. With paid plans the ads and recommendations can be hidden.
+- [Inoreader](https://www.inoreader.com/) - another modern-looking RSS reader available on iOS, Android, and Web. The basic version is limited to 150 feeds, doesn't have advanced feed management features, and contains ads.
+
+### For Linux and home server enthusiasts
+
+- [Miniflux](https://miniflux.app/) - a self-hosted RSS reader a minimalistic Web interface. It is free and open source. It is written in Go and uses Postgres database. A Docker image is available for easy deployment. It is a great option if you want to host your own RSS reader and have full control over your data.
 
 ---
 
